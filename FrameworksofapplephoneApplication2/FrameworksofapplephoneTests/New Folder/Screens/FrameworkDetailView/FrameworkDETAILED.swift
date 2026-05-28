@@ -1,0 +1,37 @@
+import SwiftUI
+
+struct FrameworkDetailView: View {
+
+    var framework: Framework
+    @Binding var isShowingDetailView: Bool
+    @State private var isShowingSafariView = false
+    var body: some View {
+        VStack {
+            XDismissButton(isShowingDetailView: $isShowingDetailView)
+            Spacer()
+            
+            FrameworkTitleView(framework: Framework)
+            Text(framework.description)
+                .font(.body)
+                .padding()
+            
+            Spacer()
+            
+            Button {
+                isShowingSafariView = true
+            } label: {
+                AppleframworkButton(title: "LEARN MORE")
+            }
+        }
+        .sheet(isPresented: $isShowingDetailView, content: { SafariView(url: URL(string: framework.urlstring) ?? URL(string: "www.apple.com")!)
+        })
+    }
+}
+
+struct FrameworkDetailView_Previews: PreviewProvider {
+    static var previews: some View {
+        FrameworkDetailView(framework: MockData.sampleFramework,
+                            isShowingDetailView: .constant(false))
+        .preferredColorScheme(.dark)
+    }
+}
